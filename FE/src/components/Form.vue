@@ -1,6 +1,6 @@
 <template>
     <ValidationObserver ref="observer" v-slot="{ handleSubmit, reset }">
-        <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset" :model="formState">
+        <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset" :model="groupTask">
             <ValidationProvider :rules="{ required: true, maximum: { iMax: 50 }}" name="GroupName" v-slot="{ errors, valid }">
                 <b-field
                     :type="{ 'is-danger': errors[0], 'is-success': valid }"
@@ -9,7 +9,7 @@
                     <template #label>
                         Tên nhóm <span class="has-text-danger">*</span>
                     </template>
-                    <b-input type="input" v-model="StrName"
+                    <b-input type="input" v-model="groupTask.StrName"
                     placeholder="Tên nhóm công việc"></b-input>
                 </b-field>
             </ValidationProvider>
@@ -18,7 +18,7 @@
                     minlength="10"
                     maxlength="100"
                     placeholder="Nhập mô tả"
-                    v-model="StrDescriptions">
+                    v-model="groupTask.StrDescriptions">
                 </b-input>
             </b-field>
             <div class="buttons">
@@ -30,7 +30,7 @@
                     <template #label>
                         Đối tượng áp dụng <span class="has-text-danger">*</span>
                     </template>
-                    <b-select placeholder="Chọn đối tượng" v-model="IntObjectFor">
+                    <b-select placeholder="Chọn đối tượng" v-model="groupTask.IntObjectFor">
                         <option value="1">Quản lý</option>
                         <option value="2">PGD</option>
                     </b-select>
@@ -44,7 +44,7 @@
                     <template #label>
                         Loại hình <span class="has-text-danger">*</span>
                     </template>
-                    <b-select placeholder="Chọn loại hình" v-model="IntGroupFor">
+                    <b-select placeholder="Chọn loại hình" v-model="groupTask.IntGroupFor">
                         <option value="1">Kinh doanh</option>
                         <option value="2">Markting</option>
                     </b-select>
@@ -59,7 +59,7 @@
                             Thứ tự hiển thị <span class="has-text-danger">*</span>
                         </template>
                         <b-field>
-                            <b-input type="input" v-model="IntGroupBy" placeholder="Thứ tự hiển thị"></b-input>
+                            <b-input type="input" v-model="groupTask.IntGroupBy" placeholder="Thứ tự hiển thị"></b-input>
                         </b-field>
                     </b-field>
                 </ValidationProvider>
@@ -92,27 +92,23 @@ export default {
         ValidationObserver,
         ValidationProvider
     },
-    data: () => ({
-        formState: null,
-        StrName:'',
-        StrDescriptions: '',
-        IntObjectFor: '',
-        IntGroupFor:'',
-        IntGroupBy: 0
-    }),
+    data(){
+        return {
+            groupTask: {
+                StrName:'',
+                StrDescriptions: '',
+                IntObjectFor: '',
+                IntGroupFor:'',
+                IntGroupBy: 0
+            }
+        };
+    },
     methods: {
         submit() {
-            var requestModel = {
-                StrName: this.StrName,
-                StrDescriptions: this.StrDescriptions,
-                IntObjectFor: this.IntObjectFor,
-                IntGroupFor: this.IntGroupFor,
-                IntGroupBy: this.IntGroupBy
-            };
-            console.log(JSON.stringify(requestModel));
+            console.log(JSON.stringify(this.groupTask));
 
             try{
-                Repository.post('/api/v1/GroupTask/WriteGroupTask', requestModel)
+                Repository.post('/api/v1/GroupTask/WriteGroupTask', this.groupTask)
                 .then((res) => {
                     //console.log(res);
                     this.$buefy.toast.open({
