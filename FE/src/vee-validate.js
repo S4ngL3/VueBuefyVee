@@ -6,6 +6,14 @@ extend("required", {
     message: "Trường dữ liệu bắt buộc."
 });
 
+extend('maximum', {
+    params: ['iMax'],
+    validate: (value, { iMax }) => {
+        return value.length <= iMax;
+    },
+    message: 'Số lượng ký tự tối đa cho phép là {iMax}'
+}),
+
 extend("max", {
     ...max,
     message: 'Số lượng ký tự tối đa cho phép là 50'

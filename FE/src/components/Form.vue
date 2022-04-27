@@ -1,7 +1,7 @@
 <template>
     <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
         <section class="section">
-            <ValidationProvider rules="required|max:50" name="GroupName" v-slot="{ errors, valid }">
+            <ValidationProvider :rules="{ required: true, maximum: { iMax: 50 }}" name="GroupName" v-slot="{ errors, valid }">
                 <b-field
                     :type="{ 'is-danger': errors[0], 'is-success': valid }"
                     :message="errors"
