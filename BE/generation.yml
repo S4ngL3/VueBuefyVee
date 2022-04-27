@@ -1,0 +1,70 @@
+#---------------------------------#
+# project section -  Used for shared variables through out the configuration file
+#---------------------------------#
+project:
+  # the root namespace for the project
+  namespace: 'Net5Template'
+  # the root directory for the project
+  directory: .\
+
+#---------------------------------#
+# data section -  Used for configuring database connections
+#---------------------------------#
+database:
+  # the connection string to the database
+  connectionString: 'server=192.168.10.20;database=APPPOS_CHECKLIST_test_27-10;UId=dev;Password=dev@123'
+  # the database provider name.  Default: SqlServer
+  provider: SqlServer
+
+#---------------------------------#
+# data section - controls the generated files for Entity Framework
+#---------------------------------#
+data:
+  # data context file configuration
+  context:
+    name: 'AppPosContext'          # the data context class name
+    baseClass: DbContext                    # the data context base class name
+    namespace: '{Project.Namespace}.Data'   # the data context namespace
+    directory: '{Project.Directory}\Net5Template.Infrastructure'   # the data context output directory
+    
+    #include XML documentation
+    document: true
+
+  # entity class file configuration
+  entity:
+    namespace: '{Project.Namespace}.Data.Entities'  # the entity class namespace
+    directory: '{Project.Directory}\Net5Template.Infrastructure\Entities'  # the entity class output directory
+    
+    #include XML documentation
+    document: true
+
+  # mapping class file configuration
+  mapping:
+    namespace: '{Project.Namespace}.Data.Mapping'   # the mapping class namespace
+    directory: '{Project.Directory}\Net5Template.Infrastructure\Mapping'   # the mapping class output directory
+    
+    #include XML documentation
+    document: true
+
+#---------------------------------#
+# model section - controls the optional view model generation
+#---------------------------------#
+model:
+  # shared options between read, create and update models
+  shared:
+    namespace: '{Project.Namespace}.Domain.Models' # the model class namespace
+    directory: '{Project.Directory}\Net5Template.Domain\Models' # the mapping class output directory
+
+  # read view model class configuration
+  read:
+    generate: true                  # generate read model class files
+    name: '{Entity.Name}ReadModel'  # the read model class name
+    namespace: '{Project.Namespace}.Domain.Models'
+    directory: '{Project.Directory}\Net5Template.Domain\Models'
+
+  # create view model class configuration
+  create:
+    generate: true                      # generate create model class files
+    name: '{Entity.Name}WriteModel'    # the create model class name
+    namespace: '{Project.Namespace}.Domain.Models'
+    directory: '{Project.Directory}\Net5Template.Domain\Models'
