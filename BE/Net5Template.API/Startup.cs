@@ -22,6 +22,7 @@ using Net5Template.Application.Services;
 using Net5Template.Data;
 using Net5Template.Domain.Interfaces;
 using Net5Template.Domain.Repositories;
+using Net5Template.API.Filters;
 
 namespace Net5Template.API
 {
@@ -41,14 +42,16 @@ namespace Net5Template.API
             services.AddControllers(p =>
             {
                 p.Filters.Add<ActionFilterCommon>();
+
+                p.Filters.Add(typeof(ValidateModelAttribute));
             }).ConfigureApiBehaviorOptions(options =>
             {
-                options.InvalidModelStateResponseFactory = actionContext =>
-                {
-                    var modelState = actionContext.ModelState;
-                    return new BadRequestObjectResult(string.Join(',', modelState.Values.SelectMany(x => x.Errors)
-                        .Select(x => x.ErrorMessage)));
-                };
+                //options.InvalidModelStateResponseFactory = actionContext =>
+                //{
+                //    var modelState = actionContext.ModelState;
+                //    return new BadRequestObjectResult(string.Join(',', modelState.Values.SelectMany(x => x.Errors)
+                //        .Select(x => x.ErrorMessage)));
+                //};
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;

@@ -20,11 +20,13 @@ namespace Net5Template.Domain.Models
         public long? IntParentId { get; set; }
 
         [Required(ErrorMessage = "Trường dữ liệu bắt buộc.")]
+        [Range(1, 10, ErrorMessage = "Trường dữ liệu bắt buộc.")]
         public int? IntGroupFor { get; set; }
 
         public int? IntRegionFor { get; set; }
 
         [Required(ErrorMessage = "Trường dữ liệu bắt buộc.")]
+        [Range(1, 10, ErrorMessage = "Trường dữ liệu bắt buộc.")]
         public int? IntObjectFor { get; set; }
 
         public int? IntActive { get; set; }
@@ -38,7 +40,7 @@ namespace Net5Template.Domain.Models
         public int? State { get; set; }
 
         [Required(ErrorMessage = "Trường dữ liệu bắt buộc.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Thứ tự phải lớn hơn 0")]
+        [Range(1, int.MaxValue, ErrorMessage = "Thứ tự phải lớn hơn 0")]
         public int? IntGroupBy { get; set; }
 
         #endregion

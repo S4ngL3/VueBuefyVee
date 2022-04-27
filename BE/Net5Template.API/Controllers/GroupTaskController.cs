@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Net5Template.Application.Interfaces;
 using Net5Template.Domain.Models;
+using Net5Template.API.Filters;
 
 namespace Net5Template.API.Controllers
 {
@@ -20,23 +21,17 @@ namespace Net5Template.API.Controllers
             _service = service;
         }
         [HttpGet]
-        public ActionResult<OperationModel> Test()
+        public ActionResult Test()
         {
             return Ok(new OperationModel() { Result = 1, Message = "Test success!" });
         }
         [HttpPost]
-        public ActionResult<OperationModel> WriteGroupTask([FromBody] GroupTaskWriteModel model)
+        [ValidateModel]
+        public ActionResult WriteGroupTask([FromBody] GroupTaskWriteModel model)
         {
             var res = _service.WriteGroupTask(model);
 
             return Ok(res);
-        }
-        [HttpPost]
-        public GroupTaskWriteModel WriteGroupTask1([FromBody] GroupTaskWriteModel model)
-        {
-            //var res = _service.WriteGroupTask(model);
-
-            return model;
         }
     }
 }
