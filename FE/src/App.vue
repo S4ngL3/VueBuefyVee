@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+      <router-link to="/casestudy">Case Study</router-link> |
       <router-link to="/">Trang chủ</router-link> |
       <router-link to="/login">Đăng nhập</router-link>
     </div>

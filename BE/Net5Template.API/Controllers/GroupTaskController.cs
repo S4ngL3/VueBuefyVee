@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Net5Template.Application.Interfaces;
+using Net5Template.Domain.Models;
 
 namespace Net5Template.API.Controllers
 {
@@ -17,6 +18,18 @@ namespace Net5Template.API.Controllers
         public GroupTaskController(IService service)
         {
             _service = service;
+        }
+        [HttpGet]
+        public ActionResult<OperationModel> Test()
+        {
+            return Ok(new OperationModel() { Result = 1, Message = "Test success!" });
+        }
+        [HttpPost]
+        public ActionResult<OperationModel> WriteGroupTask([FromBody] GroupTaskWriteModel model)
+        {
+            var res = _service.WriteGroupTask(model);
+
+            return Ok(res);
         }
     }
 }

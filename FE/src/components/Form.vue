@@ -1,6 +1,6 @@
 <template>
-    <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
-        <section class="section">
+    <ValidationObserver ref="observer" v-slot="{ handleSubmit, reset }">
+        <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset" :model="formState">
             <ValidationProvider :rules="{ required: true, maximum: { iMax: 50 }}" name="GroupName" v-slot="{ errors, valid }">
                 <b-field
                     :type="{ 'is-danger': errors[0], 'is-success': valid }"
@@ -9,7 +9,7 @@
                     <template #label>
                         Tên nhóm <span class="has-text-danger">*</span>
                     </template>
-                    <b-input type="input" v-model="groupName"
+                    <b-input type="input" v-model="StrName"
                     placeholder="Tên nhóm công việc"></b-input>
                 </b-field>
             </ValidationProvider>
@@ -17,7 +17,8 @@
                 <b-input type="textarea"
                     minlength="10"
                     maxlength="100"
-                    placeholder="Nhập mô tả">
+                    placeholder="Nhập mô tả"
+                    v-model="StrDescriptions">
                 </b-input>
             </b-field>
             <div class="buttons">
@@ -29,7 +30,7 @@
                     <template #label>
                         Đối tượng áp dụng <span class="has-text-danger">*</span>
                     </template>
-                    <b-select placeholder="Chọn đối tượng" v-model="applyObject">
+                    <b-select placeholder="Chọn đối tượng" v-model="IntObjectFor">
                         <option value="1">Quản lý</option>
                         <option value="2">PGD</option>
                     </b-select>
@@ -43,7 +44,7 @@
                     <template #label>
                         Loại hình <span class="has-text-danger">*</span>
                     </template>
-                    <b-select placeholder="Chọn loại hình" v-model="type">
+                    <b-select placeholder="Chọn loại hình" v-model="IntGroupFor">
                         <option value="1">Kinh doanh</option>
                         <option value="2">Markting</option>
                     </b-select>
@@ -58,14 +59,14 @@
                             Thứ tự hiển thị <span class="has-text-danger">*</span>
                         </template>
                         <b-field>
-                            <b-input type="input" v-model="order" placeholder="Thứ tự hiển thị"></b-input>
+                            <b-input type="input" v-model="IntGroupBy" placeholder="Thứ tự hiển thị"></b-input>
                         </b-field>
                     </b-field>
                 </ValidationProvider>
             </div>
 
             <div class="buttons">
-                <button class="button is-success" @click="handleSubmit(submit)">
+                <button class="button is-success" type="submit">
                     <!-- <span class="icon is-small">
                         <i class="fas fa-check"></i>
                     </span> -->
@@ -78,11 +79,12 @@
                     <span>Reset</span>
                 </button>
             </div>
-        </section>
+        </form>
     </ValidationObserver>
 </template>
 <script>
-import { ValidationObserver, ValidationProvider } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import Repository from "@/repositories/Repository.vue";
 
 export default {
     name: "BuefyForm",
@@ -91,22 +93,46 @@ export default {
         ValidationProvider
     },
     data: () => ({
-        groupName:'',
-        description: '',
-        applyObject: '',
-        type:'',
-        order: 0
+        formState: null,
+        StrName:'',
+        StrDescriptions: '',
+        IntObjectFor: '',
+        IntGroupFor:'',
+        IntGroupBy: 0
     }),
     methods: {
         submit() {
-            console.log('Form submitted');
+            var requestModel = {
+                StrName: this.StrName,
+                StrDescriptions: this.StrDescriptions,
+                IntObjectFor: this.IntObjectFor,
+                IntGroupFor: this.IntGroupFor,
+                IntGroupBy: this.IntGroupBy
+            };
+            console.log(JSON.stringify(requestModel));
+
+            try{
+                Repository.post('/api/v1/GroupTask/WriteGroupTask', requestModel)
+                .then((res) => {
+                    //console.log(res);
+                    this.$buefy.toast.open({
+                        duration: 5000,
+                        message: res.data.Message,
+                        position: 'is-bottom',
+                        type: 'is-danger'
+                    })
+                })
+            }
+            catch(error){
+                console.log(error);
+            }
         },
         resetForm() {
-            this.groupName = '';
-            this.description = '';
-            this.applyObject = '';
-            this.type = '';
-            this.order = 0;
+            this.StrName = '';
+            this.StrDescriptions = '';
+            this.IntObjectFor = '';
+            this.IntGroupFor = '';
+            this.IntGroupBy = 0;
             requestAnimationFrame(() => {
                 this.$refs.observer.reset();
             })

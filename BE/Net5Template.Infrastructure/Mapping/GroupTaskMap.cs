@@ -38,7 +38,8 @@ namespace Net5Template.Data.Mapping
             builder.Property(t => t.StrName)
                 .HasColumnName("str_name")
                 .HasColumnType("nvarchar(250)")
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .IsRequired();
 
             builder.Property(t => t.StrDescriptions)
                 .HasColumnName("str_descriptions")
