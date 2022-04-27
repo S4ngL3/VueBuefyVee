@@ -31,5 +31,12 @@ namespace Net5Template.API.Controllers
 
             return Ok(res);
         }
+        [HttpPost]
+        public GroupTaskWriteModel WriteGroupTask1([FromBody] GroupTaskWriteModel model)
+        {
+            //var res = _service.WriteGroupTask(model);
+
+            return model;
+        }
     }
 }
